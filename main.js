@@ -22,3 +22,11 @@ days.innerText = daysLeft;
 hours.innerText = hoursLeft < 10 ? '0' + hoursLeft : hoursLeft; 
 minutes.innerText = minutesLeft < 10 ? '0' + minutesLeft : minutesLeft; ; 
 seconds.innerText = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft; ; 
+
+
+year.innerText = currentYear + 1; 
+function updateCounter() {
+
+}
+
+setInterval(updateCounter, 1000);
