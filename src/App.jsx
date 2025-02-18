@@ -19,3 +19,18 @@ function App() {
 
 export default App;
 
+// говорим что функция асинхронная 
+async function getResponse() {
+  let response = await fetch('url')
+  
+    //успешен ли запрос
+    if (!response.ok) {
+      throw new Error(`Ошибка HTTP: ${response.status}`);
+    }
+  
+  let content = await response.text()
+  console.log(content)
+  
+  }
+  
+  getResponse()
