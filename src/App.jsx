@@ -62,12 +62,12 @@ async function getResponse() {
 ///////////ПРИМЕР 
 
 
-
-  let url = 'https://jsonplaceholder.typicode.com/users/1';
-  let response = await fetch(url);
-  let content = await responsse/json();
-
-  alert(content[0].author.login); 
+ler async function {
+  async url = 'https://jsonplaceholder.typicode.com/users/1';
+  async response = await fetch(url);
+  async content = await response.json();
+}
+  console.log(content.name); 
 
 
 
