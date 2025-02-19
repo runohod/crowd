@@ -66,7 +66,7 @@ ler async function {
   async url = 'https://jsonplaceholder.typicode.com/users/1';
   async response = await fetch(url);
   async content = await response.json();
-}
+} и
   console.log(content.name); 
 
 
