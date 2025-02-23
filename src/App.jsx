@@ -19,24 +19,6 @@ function App() {
 
 export default App;
 
-// говорим что функция асинхронная 
-async function getResponse() {
-  let response = await fetch('https://jsonplaceholder.typicode.com/posts/1')
-  
-    //успешен ли запрос
-    if (!response.ok) {
-      throw new Error(`Ошибка HTTP: ${response.status}`);
-    }
-  
-  let content = await response.json()
-  console.log(content)
-  
-  }
-  
-  getResponse()
-
-
-
   async function getResponse() {
     try {
       let response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
@@ -66,7 +48,7 @@ ler async function {
   async url = 'https://jsonplaceholder.typicode.com/users/1';
   async response = await fetch(url);
   async content = await response.json();
-} и
+}
   console.log(content.name); 
 
 
