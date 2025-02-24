@@ -62,3 +62,28 @@ fetch('https://jsonplaceholder.typicode.com/users/1');
 
 .catch(error => console.error('ошибка ' error));
 
+
+ 
+
+// РЕШЕНИЕ ЗАДАЧИ 2 
+// 1) должны из массива взять все значения больше 0 
+// 2) сложить их  
+// 3) соблюсти условие - если нет положительных значений, функция возвращает 0 
+
+
+function sumPositiveNumbers(arr) {
+  let normNumber = arr.filter(function(x) {
+    return (x > 0);
+  });
+
+  let sum = normNumber.reduce(function(a, b) {
+    return (a + b);
+  });
+
+  if (normNumber.lenght === 0) {
+   return 0;
+  }
+
+  return sum; 
+}
+
