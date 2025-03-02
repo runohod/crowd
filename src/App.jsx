@@ -2,8 +2,8 @@ import React, { useState, useEffect} from 'react';
 import './App.css';
 
 function App() {
-  const [count, setCounter, setCat] = useState(0)
-  const [setCat] = useState(0)
+  const [count, setCounter] = useState(0)
+  const [count, setCat] = useState(0)
   const handClick =() => {
     setCounter(count + 1);
   };
