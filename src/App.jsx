@@ -14,76 +14,55 @@ function App() {
 
     </div>
   );
-
 }
 
 export default App;
 
+  useEffect(()=>{
   async function getResponse() {
-    try {
-      let response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
-  
-      //проверка на положительный запрос
-      if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
+      try {
+        let response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+    
+        //проверка на положительный запрос
+        if (!response.ok) {
+          throw new Error(Ошибка HTTP: ${response.status});
+        }
+    
+        //ответ как JSON
+        let content = await response.json();
+        console.log(content); // Выводим ответ в консоль
+        setCat(data.result); //сохраняетт котов в состояние
+      } catch (error) {
+        //сообщение об ошибке
+        console.error('Произошла ошибка:', error);
       }
-  
-      //ответ как JSON
-      let content = await response.json();
-      console.log(content); // Выводим ответ в консоль
-    } catch (error) {
-      //сообщение об ошибке
-      console.error('Произошла ошибка:', error);
     }
-  }
+    
+    // Вызываем функцию
+    getResponse();
   
-  // Вызываем функцию
-  getResponse();
+  },[])
 
 
 ///////////ПРИМЕР 
 
 
-ler async function {
-  async url = 'https://jsonplaceholder.typicode.com/users/1';
-  async response = await fetch(url);
-  async content = await response.json();
-}
-  console.log(content.name); 
+// async function fetchUser() {
+//   const url = 'https://jsonplaceholder.typicode.com/users/1';
+//   const response = await fetch(url);
+//   const content = await response.json();
+//   console.log(content.name);
+// }
+
+// fetchUser();
 
 
 
-fetch('https://jsonplaceholder.typicode.com/users/1');
-.then(response => response.json())
-.then(data => {
-  console.log('Имя ${daa.name}');
-  console.log('Email $[data.email]');
-})
-
-.catch(error => console.error('ошибка ' error));
-
-
- 
-
-// РЕШЕНИЕ ЗАДАЧИ 2 
-// 1) должны из массива взять все значения больше 0 
-// 2) сложить их  
-// 3) соблюсти условие - если нет положительных значений, функция возвращает 0 
-
-
-function sumPositiveNumbers(arr) {
-  let normNumber = arr.filter(function(x) {
-    return (x > 0);
-  });
-
-  let sum = normNumber.reduce(function(a, b) {
-    return (a + b);
-  });
-
-  if (normNumber.lenght === 0) {
-   return 0;
-  }
-
-  return sum; 
-}
+// fetch('https://jsonplaceholder.typicode.com/users/1')
+//   .then(response => response.json())
+//   .then(data => {
+//     console.log(`Имя: ${data.name}`);
+//     console.log(`Email: ${data.email}`);
+//   })
+//   .catch(error => console.error('Ошибка:', error));
 
