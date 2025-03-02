@@ -16,8 +16,6 @@ function App() {
   );
 }
 
-export default App;
-
   useEffect(()=>{
   async function getResponse() {
       try {
