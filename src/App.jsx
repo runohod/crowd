@@ -3,7 +3,7 @@ import './App.css';
 
 function App() {
   const [count, setCounter] = useState(0)
-  const [count, setCat] = useState(0)
+  const [cats, setCats] = useState(0)
   const handClick =() => {
     setCounter(count + 1);
   };
@@ -11,7 +11,7 @@ function App() {
   useEffect(()=>{
     async function getResponse() {
         try {
-          let response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+          let response = await fetch('https://api.thecatapi.com/v1/images/search?limit=10');
       
           //проверка на положительный запрос
           if (!response.ok) {
@@ -21,13 +21,15 @@ function App() {
           //ответ как JSON
           let content = await response.json();
           console.log(content); // Выводим ответ в консоль
-          setCat(content); //сохраняетт котов в состояние
+          setCats(content); //сохраняетт котов в состояние
         } catch (error) {
           //сообщение об ошибке
           console.error('Произошла ошибка:', error);
         }
       }
       
+
+    
       // Вызываем функцию
       getResponse();
     
