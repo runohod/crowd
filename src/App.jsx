@@ -40,6 +40,22 @@ function App() {
         <h3>кол-во кликов по котам:</h3>
         <button onClick={handClick}>клик по коту</button>
 
+
+        ________________________________________________________________
+
+ Отображение котов с использованием map
+ <div className="cats-container">
+        {cats.map((cat) => (
+          <div key={cat.id} className="cat-card">
+            <img src={cat.url} alt={`Кот ${cat.id}`} className="cat-image" />
+            <p>ID кота: {cat.id}</p>
+          </div>
+        ))}
+      </div>
+
+
+________________________________________________________________
+
     </div>
   );
 
