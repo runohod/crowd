@@ -43,7 +43,7 @@ function App() {
 
         ________________________________________________________________
 
- Отображение котов с использованием map
+ {/* Отображение котов с использованием map */}
  <div className="cats-container">
         {cats.map((cat) => (
           <div key={cat.id} className="cat-card">
