@@ -84,3 +84,22 @@ export default App;
 //   })
 //   .catch(error => console.error('Ошибка:', error));
 
+
+// Как нам задать каокй то уникальный контекст
+// 1) За счет aply call bind. Явно задаем
+delcaration.call({ newContext: 'some' });
+
+// 2) Это объявить функцию в объекте. Либо через объект
+const user = {
+    name: 'Alex',
+    // Контекстом данной функции будет являться user
+    greet:function() {
+        console.log('Hello, my name is '+ this.name)
+    },
+}
+user.greet();
+
+// При вызове через точку user.greet() значение this равняется объекту до точки(user). 
+// Без этого объекта this равняется глобальному объекту(в обычном режиме).В строгом режиме мы бы получили ошибку «Cannot read properties of undefined».
+const greet = user.greet
+greet() // Исключение, вот тут у функции не будет контекста объекта user
