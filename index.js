@@ -12,3 +12,6 @@ var requestOptions = {
 fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30", requestOptions)
 
 // схранять котов у локал сторедж . А при удаление котво из избаранных кота нужно подчищать в локал сторадж
+
+
+
