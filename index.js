@@ -9,26 +9,54 @@ var requestOptions = {
     redirect: 'follow'
 };
  
-fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30", requestOptions)
+// fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30", requestOptions)
 
 // схранять котов у локал сторедж . А при удаление котво из избаранных кота нужно подчищать в локал сторадж
 
-const image = document.querySelector(".img");
-const url = "https://api.thecatapi.com/v1/images/search?page=0&limit=30";
+const catGrid = document.getElementById("catGrid");
 
-async function fetchHandler() {
+async function fetchCats() {
   try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    image.src = data.file;
-    console.log(response);
+    const response = await fetch("https://api.thecatapi.com/v1/images/search?limit=30");
+    const cats = await response.json();
+    displayCats(cats);
   } catch (error) {
-    console.log(error)
+    console.error(error);
   }
 }
 
-fetchHandler()
+function displayCats(cats) {
+  catGrid.innerHTML = "";
+  cats.forEach(cat => {
+    const img = document.createElement("img");
+    img.src = cat.url;
+    img.alt = "Котик";
+    img.classList.add("cat-img");
+    catGrid.appendChild(img);
+  });
+}
+
+fetchCats();
+
+
+// const image = document.querySelector(".img");
+// const url = "https://api.thecatapi.com/v1/images/search?page=0&limit=30";
+
+// async function fetchHandler() {
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
+
+//     image.src = data.file;
+//     console.log(response);
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+// fetchHandler()
+
+
 
 // function fetchImage() {
 //   const apiKey = "Your-apiKey";
