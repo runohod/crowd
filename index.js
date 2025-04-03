@@ -17,7 +17,7 @@ const catGrid = document.getElementById("catGrid");
 
 async function fetchCats() {
   try {
-    const response = await fetch("https://api.thecatapi.com/v1/images/search?limit=30");
+    const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30");
     const cats = await response.json();
     displayCats(cats);
   } catch (error) {
@@ -30,7 +30,6 @@ function displayCats(cats) {
   cats.forEach(cat => {
     const img = document.createElement("img");
     img.src = cat.url;
-    img.alt = "Котик";
     img.classList.add("cat-img");
     catGrid.appendChild(img);
   });
