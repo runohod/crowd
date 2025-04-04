@@ -15,24 +15,31 @@ var requestOptions = {
 
 const catGrid = document.getElementById("cat");
 
+
 async function fetchCats() {
   try {
-    const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30");
+    const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions);
     const cats = await response.json();
     displayCats(cats);
   } catch (error) {
-    console.error(error);
+    console.log("Ошибка" , error);
   }
 }
 
 function displayCats(cats) {
-  catGrid.innerHTML = "";
-  cats.forEach(cat => {
+  try { cats.forEach(cat => {
     const img = document.createElement("img");
     img.src = cat.url;
     img.classList.add("cat-img");
     catGrid.appendChild(img);
   });
+}
+
+  catch (error) {
+    catGrid.innerHTML = "Произошла ошибки";
+   
+
+  }
 }
 
 fetchCats();
