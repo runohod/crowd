@@ -13,7 +13,7 @@ var requestOptions = {
 
 // схранять котов у локал сторедж . А при удаление котво из избаранных кота нужно подчищать в локал сторадж
 
-const catGrid = document.getElementById("catGrid");
+const catGrid = document.getElementById("cat");
 
 async function fetchCats() {
   try {
