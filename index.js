@@ -13,7 +13,7 @@ var requestOptions = {
 
 const catGrid = document.getElementById("cat");
 
-
+// ПЕРЕПАБОТАТЬ КОД КАК СКАЗАЛ ДЕН 
 async function fetchCats() {
   try {
     const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions);
