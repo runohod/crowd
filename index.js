@@ -13,7 +13,6 @@ var requestOptions = {
 
 const catGrid = document.getElementById("cat");
 
-// ПЕРЕПАБОТАТЬ КОД КАК СКАЗАЛ ДЕН 
 async function fetchCats() {
   try {
     const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions);
@@ -25,20 +24,40 @@ async function fetchCats() {
 }
 
 function displayCats(cats) {
-  try { cats.forEach(cat => {
-    const img = document.createElement("img");
-    img.src = cat.url;
-    img.classList.add("cat-img");
-    catGrid.appendChild(img);
-  });
-}
-
-  catch (error) {
-    catGrid.innerHTML = "Произошла ошибки";
-   
-
+  try {
+    catGrid.innerHTML = [cats].map(cat => '<div>"img.src = cat.url"</div>').join('');
+  } catch (error) {
+    catGrid.innerHTML = "Произошла ошибка";
+    console.error("Ошибка отображения:", error);
   }
 }
 
 fetchCats();
 
+
+function displayCats(cats) {
+  try {
+    catGrid.innerHTML = [cats].map(cat => `<img src="${cat.url}" class="cat-img" />`).join('');
+  } catch (error) {
+    catGrid.innerHTML = "Произошла ошибка";
+    console.error("Ошибка отображения:", error);
+  }
+}
+
+fetchCats();
+
+//catGrid.inerdHtml= [1,2,3,4,5].map((item)=>"<div>${item}</div>").join('')
+
+// function displayCats(cats) {
+//   try { cats.forEach(cat => {
+//     const img = document.createElement("img");
+//     img.src = cat.url;
+//     img.classList.add("cat-img");
+//     catGrid.appendChild(img);
+//   });
+// }
+
+//   catch (error) {
+//     catGrid.innerHTML = "Произошла ошибки";
+//   }
+// }
