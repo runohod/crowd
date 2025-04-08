@@ -13,10 +13,10 @@ var requestOptions = {
 
 const catGrid = document.getElementById("cat");
 
-async function fetchCats() {
+async function fetchCats() { // асинк помечает функцию как асинхронную
   try {
     const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions);
-    const cats = await response.json();
+    const cats = await response.json(); // эвэитне позволяет коду идти дальше, мы принудительно говорим подождать завершения пежди чем пойти дальше
     displayCats(cats);
   } catch (error) {
     console.log("Ошибка" , error);
@@ -25,19 +25,7 @@ async function fetchCats() {
 
 function displayCats(cats) {
   try {
-    catGrid.innerHTML = [cats].map(cat => '<div>"img.src = cat.url"</div>').join('');
-  } catch (error) {
-    catGrid.innerHTML = "Произошла ошибка";
-    console.error("Ошибка отображения:", error);
-  }
-}
-
-fetchCats();
-
-
-function displayCats(cats) {
-  try {
-    catGrid.innerHTML = [cats].map(cat => `<img src="${cat.url}" class="cat-img" />`).join('');
+    catGrid.innerHTML = cats.map(cat => '<div>"img.src = cat.url"</div>').join('');
   } catch (error) {
     catGrid.innerHTML = "Произошла ошибка";
     console.error("Ошибка отображения:", error);
