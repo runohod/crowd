@@ -34,6 +34,47 @@ function displayCats(cats) {
 
 fetchCats();
 
+
+
+
+// Функция для добавления лайка
+function putLike(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  }).then(checkResponse);
+}
+
+// Функция для удаления ляйка
+function deleteLike(cardId) {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then(checkResponse);
+}
+
+// Функция постановки и снятия лайка
+
+export function toggleLikeActive(evt, data, likeCountElement) {
+  const likeBtn = evt.target;
+
+  if (!likeBtn.classList.contains("card__like-button_is-active")) {
+    putLike(data._id)
+      .then((res) => {
+        likeBtn.classList.add("card__like-button_is-active");
+        likesСounter(res, likeCountElement, likeBtn);
+      })
+      .catch(console.error);
+  } else {
+    deleteLike(data._id)
+      .then((res) => {
+        likeBtn.classList.remove("card__like-button_is-active");
+        likesСounter(res, likeCountElement, likeBtn);
+      })
+      .catch(console.error);
+  }
+}
+
 //catGrid.inerdHtml= [1,2,3,4,5].map((item)=>"<div>${item}</div>").join('')
 
 // function displayCats(cats) {
@@ -49,3 +90,27 @@ fetchCats();
 //     catGrid.innerHTML = "Произошла ошибки";
 //   }
 // }
+
+
+const likeButtonArray = document.querySelectorAll('.card__like-button');
+
+iconButtonArray.forEach((iconButton, index) => {
+  iconButton.onclick = () =>
+    toggleIsLiked(likeHeartArray[index], likeButtonArray[index]);
+});
+
+likeButtonArray.forEach((button, index) => {
+  button.onclick = () => toggleIsLiked(likeHeartArray[index], button);
+});
+
+function toggleIsLiked(heart, button) {
+  heart.classList.toggle('is-liked');
+  setButtonText(heart, button);
+}
+
+
+//
+
+<button type="button" class="button card__like-button">
+<span class="button__text">Like</span>
+</button>
