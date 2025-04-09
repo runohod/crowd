@@ -8,8 +8,6 @@ var requestOptions = {
     headers: headers,
     redirect: 'follow'
 };
- 
-// схранять котов у локал сторедж . А при удаление котво из избаранных кота нужно подчищать в локал сторадж
 
 const catGrid = document.getElementById("cat");
 
@@ -25,17 +23,58 @@ async function fetchCats() { // асинк помечает функцию ка�
 
 function displayCats(cats) {
   try {
-    catGrid.innerHTML = cats.map(cat => '<div>"img.src = cat.url"</div>').join('');
+    catGrid.innerHTML = cats.map(function(cat) {
+      return '<div class="cat-item">' +
+             `<img src="${cat.url}" class="cat-img">` +
+             `<button class="like-btn" onclick="addToFavorites('${cat.id}', '${cat.url}')">Like</button>` +
+             '</div>';
+}).join('');
   } catch (error) {
     catGrid.innerHTML = "Произошла ошибка";
     console.error("Ошибка отображения:", error);
   }
 }
 
+// Добавление в избранное
+function addToFavorites(id, url) {
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  if (!favorites.find(function(cat) { return cat.id === id; })) {
+    favorites.push({ id: id, url: url });
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }
+}
+
+// Показать избранных котиков
+function showFavorites() {
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  displayFavorites(favorites);
+}
+
+// Отображение избранных
+function displayFavorites(cats) {
+  try {
+    catGrid.innerHTML = cats.map(function(cat) {
+      return '<div class="cat-item">' +
+             `<img src="${cat.url}" class="cat-img">` +
+             `<button class="remove-btn" onclick="removeFromFavorites('${cat.id}')">Remove</button>` +
+             '</div>';
+    }).join('');
+  } catch (error) {
+    catGrid.innerHTML = "Нет избранных котиков";
+    console.error("Ошибка отображения:", error);
+  }
+}
+
+// Удаление из избранного
+function removeFromFavorites(id) {
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  favorites = favorites.filter(function(cat) { return cat.id !== id; });
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+  showFavorites();
+}
+
 fetchCats();
-
-
-
+................................................................................
 
 // Функция для добавления лайка
 function putLike(cardId) {
@@ -53,44 +92,7 @@ function deleteLike(cardId) {
   }).then(checkResponse);
 }
 
-// Функция постановки и снятия лайка
-
-export function toggleLikeActive(evt, data, likeCountElement) {
-  const likeBtn = evt.target;
-
-  if (!likeBtn.classList.contains("card__like-button_is-active")) {
-    putLike(data._id)
-      .then((res) => {
-        likeBtn.classList.add("card__like-button_is-active");
-        likesСounter(res, likeCountElement, likeBtn);
-      })
-      .catch(console.error);
-  } else {
-    deleteLike(data._id)
-      .then((res) => {
-        likeBtn.classList.remove("card__like-button_is-active");
-        likesСounter(res, likeCountElement, likeBtn);
-      })
-      .catch(console.error);
-  }
-}
-
-//catGrid.inerdHtml= [1,2,3,4,5].map((item)=>"<div>${item}</div>").join('')
-
-// function displayCats(cats) {
-//   try { cats.forEach(cat => {
-//     const img = document.createElement("img");
-//     img.src = cat.url;
-//     img.classList.add("cat-img");
-//     catGrid.appendChild(img);
-//   });
-// }
-
-//   catch (error) {
-//     catGrid.innerHTML = "Произошла ошибки";
-//   }
-// }
-
+................................................................................
 
 const likeButtonArray = document.querySelectorAll('.card__like-button');
 
@@ -108,9 +110,9 @@ function toggleIsLiked(heart, button) {
   setButtonText(heart, button);
 }
 
-
 //
 
 <button type="button" class="button card__like-button">
 <span class="button__text">Like</span>
 </button>
+
