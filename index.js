@@ -37,17 +37,17 @@ function displayCats(cats) {
 
 // Добавление в избранное
 function addToFavorites(id, url) {
-  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  if (!favorites.find(function(cat) { return cat.id === id; })) {
-    favorites.push({ id: id, url: url });
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+  if (!lovepics.find(function(cat) { return cat.id === id; })) {
+    lovepics.push({ id: id, url: url });
+    localStorage.setItem('lovepics', JSON.stringify(lovepics));
   }
 }
 
 // Показать избранных котиков
 function showFavorites() {
-  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  displayFavorites(favorites);
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+  displayFavorites(lovepics);
 }
 
 // Отображение избранных
@@ -67,9 +67,9 @@ function displayFavorites(cats) {
 
 // Удаление из избранного
 function removeFromFavorites(id) {
-  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  favorites = favorites.filter(function(cat) { return cat.id !== id; });
-  localStorage.setItem('favorites', JSON.stringify(favorites));
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+  lovepics = lovepics.filter(function(cat) { return cat.id !== id; });
+  localStorage.setItem('lovepics', JSON.stringify(lovepics));
   showFavorites();
 }
 
