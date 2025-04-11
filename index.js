@@ -46,7 +46,7 @@ function addToFavorites(id, url) {
 
 // Показать избранных котиков
 function showFavorites() {
-  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [] ;
   displayFavorites(lovepics);
 }
 
