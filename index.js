@@ -9,26 +9,26 @@ var requestOptions = {
     redirect: 'follow'
 };
 
-const catGrid = document.getElementById("cat");
+const catGrid = document.getElementById("cat"); // получчаем ссылку по айдишнику 
 
 async function fetchCats() { // асинк помечает функцию как асинхронную
   try {
-    const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions);
+    const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions); // Отправляем асинхронный GET-запрос к API котиков (30 изображений)
     const cats = await response.json(); // эвэитне позволяет коду идти дальше, мы принудительно говорим подождать завершения пежди чем пойти дальше
-    displayCats(cats);
-  } catch (error) {
-    console.log("Ошибка" , error);
+    displayCats(cats); // Вызываем функцию для отображения котов
+  } catch (error) { // Обработка ошибок
+    console.log("Ошибка" , error); // Выводим ошибку в консоль 
   }
 }
 
-function displayCats(cats) {
+function displayCats(cats) { // Объявление функции для отображения карточек с котиками
   try {
-    catGrid.innerHTML = cats.map(function(cat) {
-      return '<div class="cat-item">' +
-             `<img src="${cat.url}" class="cat-img">` +
-             `<button class="like-btn" onclick="addToFavorites('${cat.id}', '${cat.url}')">Like</button>` +
+    catGrid.innerHTML = cats.map(function(cat) { // Преобразует массив объектов cats в массив HTML-строк, для каждого элемента массива вызывает функцию-колбэк
+      return '<div class="cat-item">' + // Контейнер для карточки
+             `<img src="${cat.url}" class="cat-img">` + // Тег img с URL изображения из данных котика (подставляем через шаблонную строку)
+             `<button class="like-btn" onclick="addToFavorites('${cat.id}', '${cat.url}')">Like</button>` + // Кнопка лайка с вызовом функции addToFavorites при клике (передаем id и url котик
              '</div>';
-}).join('');
+}).join(''); // Преобразуем массив HTML-строк в одну строку 
   } catch (error) {
     catGrid.innerHTML = "Произошла ошибка";
     console.error("Ошибка отображения:", error);
@@ -36,29 +36,29 @@ function displayCats(cats) {
 }
 
 // Добавление в избранное
-function addToFavorites(id, url) {
-  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
-  if (!lovepics.find(function(cat) { return cat.id === id; })) {
-    lovepics.push({ id: id, url: url });
-    localStorage.setItem('lovepics', JSON.stringify(lovepics));
+function addToFavorites(id, url) {// Функция для добавления котика в избранное 
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')); // Получаем текущий список избранного из localStorage:
+  if (!lovepics.find(function(cat) { return cat.id === id; })) {   // Проверяем, нет ли уже этого котика в избранном:
+    lovepics.push({ id: id, url: url });// Создаем объект с id и url
+    localStorage.setItem('lovepics', JSON.stringify(lovepics)); //Сохраняем обновленный массив в localStorage:
   }
 }
 
 // Показать избранных котиков
-function showFavorites() {
-  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [] ;
-  displayFavorites(lovepics);
+function showFavorites() { // Функция для отображения избранных котиков
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')); //Получаем данные избранных котиков из localStorage:
+  displayFavorites(lovepics);   //Передаем массив lovepics в функцию отображения
 }
 
 // Отображение избранных
-function displayFavorites(cats) {
+function displayFavorites(cats) { // Функция для отображения избранных котиков
   try {
-    catGrid.innerHTML = cats.map(function(cat) {
-      return '<div class="cat-item">' +
-             `<img src="${cat.url}" class="cat-img">` +
-             `<button class="remove-btn" onclick="removeFromFavorites('${cat.id}')">Remove</button>` +
+    catGrid.innerHTML = cats.map(function(cat) {  // Очищаем контейнер catGrid и заполняем новым контентом:
+      return '<div class="cat-item">' +       // Для каждого котика создаем HTML-структуру:
+             `<img src="${cat.url}" class="cat-img">` + // Изображение с URL из данных котика
+             `<button class="remove-btn" onclick="removeFromFavorites('${cat.id}')">Remove</button>` +  // Кнопка удаления с вызовом функции removeFromFavorites при клике
              '</div>';
-    }).join('');
+    }).join(''); // Объединяем массив в строку
   } catch (error) {
     catGrid.innerHTML = "Нет избранных котиков";
     console.error("Ошибка отображения:", error);
@@ -66,53 +66,12 @@ function displayFavorites(cats) {
 }
 
 // Удаление из избранного
-function removeFromFavorites(id) {
-  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
-  lovepics = lovepics.filter(function(cat) { return cat.id !== id; });
-  localStorage.setItem('lovepics', JSON.stringify(lovepics));
+function removeFromFavorites(id) { // Функция для удаления котика из избранного
+  let lovepics = JSON.parse(localStorage.getItem('lovepics'));   //Получаем текущий список избранных котиков из localStorage:
+  lovepics = lovepics.filter(function(cat) { return cat.id !== id; });   //Фильтруем массив, оставляя только котиков с НЕсовпадающим id:
+  localStorage.setItem('lovepics', JSON.stringify(lovepics));   //Сохраняем обновленный массив (без удаленного котика) в localStorage:
   showFavorites();
 }
 
 fetchCats();
-................................................................................
-
-// Функция для добавления лайка
-function putLike(cardId) {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "PUT",
-    headers: config.headers,
-  }).then(checkResponse);
-}
-
-// Функция для удаления ляйка
-function deleteLike(cardId) {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: "DELETE",
-    headers: config.headers,
-  }).then(checkResponse);
-}
-
-................................................................................
-
-const likeButtonArray = document.querySelectorAll('.card__like-button');
-
-iconButtonArray.forEach((iconButton, index) => {
-  iconButton.onclick = () =>
-    toggleIsLiked(likeHeartArray[index], likeButtonArray[index]);
-});
-
-likeButtonArray.forEach((button, index) => {
-  button.onclick = () => toggleIsLiked(likeHeartArray[index], button);
-});
-
-function toggleIsLiked(heart, button) {
-  heart.classList.toggle('is-liked');
-  setButtonText(heart, button);
-}
-
-//
-
-<button type="button" class="button card__like-button">
-<span class="button__text">Like</span>
-</button>
 
