@@ -11,9 +11,9 @@ var requestOptions = {
 
 const catGrid = document.getElementById("cat"); // получчаем ссылку по айдишнику 
 
-async function fetchCats() { // асинк помечает функцию как асинхронную
+async function fetchCats(page = 0) { // асинк помечает функцию как асинхронную
   try {
-    const response = await fetch("https://api.thecatapi.com/v1/images/search?page=0&limit=30" , requestOptions); // Отправляем асинхронный GET-запрос к API котиков (30 изображений)
+    const response = await fetch("https://api.thecatapi.com/v1/images/search?page="+ page +"&limit=10&order=ASC" , requestOptions); // Отправляем асинхронный GET-запрос к API котиков (30 изображений)
     const cats = await response.json(); // эвэитне позволяет коду идти дальше, мы принудительно говорим подождать завершения пежди чем пойти дальше
     displayCats(cats); // Вызываем функцию для отображения котов
   } catch (error) { // Обработка ошибок
@@ -38,6 +38,8 @@ function displayCats(cats) { // Объявление функции для от�
 // Добавление в избранное
 function addToFavorites(id, url) {// Функция для добавления котика в избранное 
   let lovepics = JSON.parse(localStorage.getItem('lovepics')); // Получаем текущий список избранного из localStorage:
+  console.log("click", lovepics );
+  if (!lovepics) {lovepics = []}
   if (!lovepics.find(function(cat) { return cat.id === id; })) {   // Проверяем, нет ли уже этого котика в избранном:
     lovepics.push({ id: id, url: url });// Создаем объект с id и url
     localStorage.setItem('lovepics', JSON.stringify(lovepics)); //Сохраняем обновленный массив в localStorage:
@@ -73,5 +75,11 @@ function removeFromFavorites(id) { // Функция для удаления к�
   showFavorites();
 }
 
+ document.getElementById("number").addEventListener("click", function(){
+  fetchCats (1)
+ })
+
+
 fetchCats();
 
+// сделать курсор поинтер, пока он считает строку 
