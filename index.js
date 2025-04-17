@@ -21,32 +21,38 @@ async function fetchCats(page = 0) { // асинк помечает функци
   }
 }
 
-function displayCats(cats) { // Объявление функции для отображения карточек с котиками
+function displayCats(cats) {
   try {
-    catGrid.innerHTML = cats.map(function(cat) { // Преобразует массив объектов cats в массив HTML-строк, для каждого элемента массива вызывает функцию-колбэк
-      return '<div class="cat-item">' + // Контейнер для карточки
-             `<img src="${cat.url}" class="cat-img">` + // Тег img с URL изображения из данных котика (подставляем через шаблонную строку)
+    const lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+    catGrid.innerHTML = cats.map(function(cat) {
+      const isLiked = lovepics.some(lovedCat => lovedCat.id === cat.id);
+      return `<div class="cat-item" data-cat-id="${cat.id}">` +
+             `<img src="${cat.url}" class="cat-img">` +
              `<button class="like-btn" onclick="addToFavorites('${cat.id}', '${cat.url}')">
-  <svg class="heart-icon" viewBox="0 0 24 24">
+  <svg class="heart-icon ${isLiked ? 'liked' : ''}" viewBox="0 0 24 24">
     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
   </svg>
-</button>` + // Кнопка лайка с вызовом функции addToFavorites при клике (передаем id и url котик
+</button>` +
              '</div>';
-}).join(''); // Преобразуем массив HTML-строк в одну строку 
+    }).join('');
   } catch (error) {
     catGrid.innerHTML = "Произошла ошибка";
     console.error("Ошибка отображения:", error);
   }
 }
 
-// Добавление в избранное
-function addToFavorites(id, url) {// Функция для добавления котика в избранное 
-  let lovepics = JSON.parse(localStorage.getItem('lovepics')); // Получаем текущий список избранного из localStorage:
-  console.log("click", lovepics );
-  if (!lovepics) {lovepics = []}
-  if (!lovepics.find(function(cat) { return cat.id === id; })) {   // Проверяем, нет ли уже этого котика в избранном:
-    lovepics.push({ id: id, url: url });// Создаем объект с id и url
-    localStorage.setItem('lovepics', JSON.stringify(lovepics)); //Сохраняем обновленный массив в localStorage:
+// Обновленная функция addToFavorites
+function addToFavorites(id, url) {
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+  if (!lovepics.find(cat => cat.id === id)) {
+    lovepics.push({ id: id, url: url });
+    localStorage.setItem('lovepics', JSON.stringify(lovepics));
+    // Обновляем сердечко
+    const catItem = document.querySelector(`[data-cat-id="${id}"]`);
+    if (catItem) {
+      const heartIcon = catItem.querySelector('.heart-icon');
+      heartIcon.classList.add('liked');
+    }
   }
 }
 
@@ -71,11 +77,17 @@ function displayFavorites(cats) { // Функция для отображени�
   }
 }
 
-// Удаление из избранного
-function removeFromFavorites(id) { // Функция для удаления котика из избранного
-  let lovepics = JSON.parse(localStorage.getItem('lovepics'));   //Получаем текущий список избранных котиков из localStorage:
-  lovepics = lovepics.filter(function(cat) { return cat.id !== id; });   //Фильтруем массив, оставляя только котиков с НЕсовпадающим id:
-  localStorage.setItem('lovepics', JSON.stringify(lovepics));   //Сохраняем обновленный массив (без удаленного котика) в localStorage:
+// Обновленная функция removeFromFavorites
+function removeFromFavorites(id) {
+  let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+  lovepics = lovepics.filter(cat => cat.id !== id);
+  localStorage.setItem('lovepics', JSON.stringify(lovepics));
+  // Обновляем сердечко в разделе "Все котики"
+  const catItem = document.querySelector(`[data-cat-id="${id}"]`);
+  if (catItem) {
+    const heartIcon = catItem.querySelector('.heart-icon');
+    heartIcon.classList.remove('liked');
+  }
   showFavorites();
 }
 

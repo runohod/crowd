@@ -156,3 +156,8 @@ button {
   font: inherit;
   padding: 0;
 }
+
+/* Добавим стиль для заполненного сердца */
+.heart-icon.liked {
+  fill: #ff0000;
+}
