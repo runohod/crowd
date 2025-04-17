@@ -76,20 +76,18 @@ main {
 button {
   position: absolute;
   bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 8px 20px;
-  border: none;
-  border-radius: 20px;
+  padding: 8px;
   cursor: pointer;
-  font-weight: bold;
   transition: all 0.3s ease;
   opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {
   opacity: 1;
-  transform: translateX(-50%) scale(1.05);
+  transform: scale(1.05);
 }
 
 .like-btn {
@@ -119,4 +117,42 @@ button:hover {
   .cats {
       grid-template-columns: repeat(4, 1fr);
   }
+}
+
+/* Стили для кнопки-сердца */
+.like-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.heart-icon {
+  width: 24px;
+  height: 24px;
+  stroke: #ff0000;
+  stroke-width: 2px;
+  fill: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.like-btn:hover .heart-icon {
+  fill: #ff0000;
+}
+
+.like-btn:active .heart-icon {
+  fill: #ff0000;
+  transform: scale(0.95);
+}
+
+/* Убираем стандартные стили для кнопок */
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  padding: 0;
 }
