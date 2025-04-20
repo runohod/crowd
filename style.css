@@ -161,3 +161,68 @@ button {
 .heart-icon.liked {
   fill: #ff0000;
 }
+
+
+/* Пагинация */
+.pagination-container {
+  display: inline-block;
+  position: relative;
+  margin: 20px 0;
+}
+
+.page-index {
+  cursor: pointer;
+  display: inline;
+  margin-right: 29.5px;
+  padding: 5px;
+  user-select: none;
+  color: #555;
+  font-size: 1.25em;
+  transition: color 0.3s ease;
+}
+
+.page-index:hover {
+  color: #1e88e5;
+}
+
+.pagination-container svg {
+  left: -13px;
+  position: absolute;
+  top: -11px;
+  transition: transform 500ms;
+  width: 46px;
+}
+
+.pagination-container path {
+  fill: none;
+  stroke: #2FB468;
+  stroke-dasharray: 150 150;
+  stroke-width:15;
+}
+
+/* Анимации и активное состояние */
+.pagination-container.open:not(.flip) path {
+  animation: OpenRight 500ms;
+}
+
+.pagination-container.open.flip path {
+  animation: OpenLeft 500ms;
+}
+
+.pagination-container.i1 svg { transform: translateX(0); }
+.pagination-container.i2 svg { transform: translateX(50px); }
+.pagination-container.i3 svg { transform: translateX(102px); }
+.pagination-container.i4 svg { transform: translateX(154px); }
+.pagination-container.i5 svg { transform: translateX(206px); }
+
+@keyframes OpenRight {
+  25% { stroke-dasharray: 100 150; }
+  60% { stroke-dasharray: 100 150; }
+  100% { stroke-dasharray: 150 150; }
+}
+
+@keyframes OpenLeft {
+  25% { stroke-dashoffset: -50px; }
+  60% { stroke-dashoffset: -50px; }
+  100% { stroke-dashoffset: 0; }
+}
