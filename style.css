@@ -179,6 +179,27 @@ button {
   color: #555;
   font-size: 1.25em;
   transition: color 0.3s ease;
+  position: relative;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.page-index.active {
+  background: #1e88e5;
+  color: white !important;
+  transform: scale(1.1);
+}
+
+.page-index::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 6px;
+  z-index: -1;
 }
 
 .page-index:hover {

@@ -16,40 +16,59 @@ const indices = Array.from(document.querySelectorAll('.page-index'));
 let currentPage = 0;
 
 // Инициализация пагинации
-indices.forEach((index, i) => {
-    index.addEventListener('click', () => {
-        // Анимация переключения
-        pagination.className = 'pagination-container';
-        void pagination.offsetWidth;
-        pagination.classList.add('open', `i${i + 1}`);
-        if (currentPage > i) pagination.classList.add('flip');
-        currentPage = i;
-        
-        // Загрузка данных
-        fetchCats(i);
+function initPagination() {
+    indices.forEach((index, i) => {
+        index.addEventListener('click', () => handlePaginationClick(index, i));
     });
-});
+    indices[0].classList.add('active');
+}
 
-// Загрузка котиков
+// Обработчик клика по пагинации
+function handlePaginationClick(index, pageNumber) {
+    // Обновление стилей
+    indices.forEach(idx => idx.classList.remove('active'));
+    index.classList.add('active');
+    
+    // Анимация переключения
+    pagination.className = 'pagination-container';
+    void pagination.offsetWidth; // Рефлоу для анимации
+    pagination.classList.add('open', `i${pageNumber + 1}`);
+    
+    // Направление анимации
+    if (currentPage > pageNumber) {
+        pagination.classList.add('flip');
+    }
+    
+    // Обновление состояния
+    currentPage = pageNumber;
+    fetchCats(pageNumber);
+}
+
+// Загрузка данных с API
 async function fetchCats(page = 0) {
     try {
-        const response = await fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&limit=10&order=ASC`, requestOptions);
+        const response = await fetch(
+            `https://api.thecatapi.com/v1/images/search?page=${page}&limit=10&order=ASC`, 
+            requestOptions
+        );
         const cats = await response.json();
         displayCats(cats);
         pagination.style.display = 'block';
     } catch (error) {
         console.error("Ошибка загрузки:", error);
+        catGrid.innerHTML = "<p>Не удалось загрузить котиков 😿</p>";
     }
 }
 
 // Отображение котиков
 function displayCats(cats) {
-    const lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+    const favorites = JSON.parse(localStorage.getItem('lovepics')) || [];
+    
     catGrid.innerHTML = cats.map(cat => `
         <div class="cat-item" data-cat-id="${cat.id}">
-            <img src="${cat.url}" class="cat-img">
+            <img src="${cat.url}" class="cat-img" alt="Котик ${cat.id}">
             <button class="like-btn" onclick="toggleLike('${cat.id}', '${cat.url}')">
-                <svg class="heart-icon ${lovepics.some(l => l.id === cat.id) ? 'liked' : ''}" 
+                <svg class="heart-icon ${favorites.some(f => f.id === cat.id) ? 'liked' : ''}" 
                      viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
@@ -60,41 +79,93 @@ function displayCats(cats) {
 
 // Управление избранным
 function toggleLike(id, url) {
-    let lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
-    const index = lovepics.findIndex(cat => cat.id === id);
-    
+    let favorites = JSON.parse(localStorage.getItem('lovepics')) || [];
+    const index = favorites.findIndex(cat => cat.id === id);
+    const isFavoriteView = document.querySelector('.menu-item:last-child').classList.contains('active');
+
     if (index === -1) {
-        lovepics.push({ id, url });
+        favorites.push({ id, url });
+        showNotification('❤️ Добавлено в избранное!');
     } else {
-        lovepics.splice(index, 1);
+        favorites.splice(index, 1);
+        showNotification('💔 Удалено из избранного');
+        
+        // Если находимся в разделе избранного - сразу обновляем список
+        if (isFavoriteView) {
+            const catElement = document.querySelector(`[data-cat-id="${id}"]`);
+            if (catElement) {
+                catElement.style.transform = 'scale(0)';
+                setTimeout(() => {
+                    catElement.remove();
+                    // Если список пустой - показываем сообщение
+                    if (!document.querySelector('.cat-item')) {
+                        catGrid.innerHTML = '<p class="empty-message">Нет избранных котиков</p>';
+                    }
+                }, 300);
+            }
+        }
     }
     
-    localStorage.setItem('lovepics', JSON.stringify(lovepics));
-    displayCats(JSON.parse(localStorage.getItem('lovepics')));
+    localStorage.setItem('lovepics', JSON.stringify(favorites));
+    updateLikeState(id);
+    
+    // Обновляем счетчик избранного в реальном времени
+    if (isFavoriteView && index !== -1) {
+        showFavorites();
+    }
+}
+// Обновление состояния лайка
+function updateLikeState(catId) {
+    const catItem = document.querySelector(`[data-cat-id="${catId}"]`);
+    if (catItem) {
+        const heartIcon = catItem.querySelector('.heart-icon');
+        const isLiked = JSON.parse(localStorage.getItem('lovepics'))
+            .some(f => f.id === catId);
+            
+        heartIcon.classList.toggle('liked', isLiked);
+    }
 }
 
 // Показать избранное
 function showFavorites() {
-    const lovepics = JSON.parse(localStorage.getItem('lovepics')) || [];
+    const favorites = JSON.parse(localStorage.getItem('lovepics')) || [];
     pagination.style.display = 'none';
-    catGrid.innerHTML = lovepics.map(cat => `
-        <div class="cat-item">
-            <img src="${cat.url}" class="cat-img">
-            <button class="like-btn" onclick="toggleLike('${cat.id}')">
-                <svg class="heart-icon liked" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-            </button>
-        </div>
-    `).join('') || '<p>Нет избранных котиков</p>';
+    
+    if (favorites.length > 0) {
+        catGrid.innerHTML = favorites.map(cat => `
+            <div class="cat-item">
+                <img src="${cat.url}" class="cat-img" alt="Избранный котик">
+                <button class="like-btn" onclick="toggleLike('${cat.id}')">
+                    <svg class="heart-icon liked" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </button>
+            </div>
+        `).join('');
+    } else {
+        catGrid.innerHTML = '<p class="empty-message">Нет избранных котиков</p>';
+    }
 }
 
-// Активация меню
+// Всплывающие уведомления
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 2000);
+}
+
+// Управление активным меню
 function setActive(element) {
     document.querySelectorAll('.menu-item').forEach(item => 
         item.classList.remove('active'));
     element.classList.add('active');
 }
 
-// Первоначальная загрузка
-fetchCats();
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    initPagination();
+    fetchCats();
+});
