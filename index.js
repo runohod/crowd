@@ -87,46 +87,48 @@ function toggleLike(id, url) {
         if (isFavoriteView) {
             const catElement = document.querySelector(`[data-cat-id="${id}"]`); //  Находит HTML-элемент кота с данным id
             if (catElement) {
-                catElement.style.transform = 'scale(0)';
-                setTimeout(() => {
-                    catElement.remove();
+                catElement.style.transform = 'scale(0)'; // Применяет CSS-трансформацию для анимации исчезновения элемента (уменьшение до нулевого размера).
+                setTimeout(() => { // Задержка в 300 миллисекунд для завершения анимации.
+                    catElement.remove(); // После анимации удаляет элемент из DOM.
                     // Если список пустой
-                    if (!document.querySelector('.cat-item')) {
-                        catGrid.innerHTML = '<p class="empty-message">Нет избранных котиков</p>';
+                    if (!document.querySelector('.cat-item')) { // Проверяет, остался ли хотя бы один элемент с классом .cat-item.
+                        catGrid.innerHTML = '<p class="empty-message">Нет избранных котиков</p>'; // Если элементов нет, отображает сообщение о пустом списке в блоке catGrid.
                     }
                 }, 300);
             }
         }
-    }
+    } 
     
-    localStorage.setItem('lovepics', JSON.stringify(favorites));
-    updateLikeState(id);
+    localStorage.setItem('lovepics', JSON.stringify(favorites)); // Сохраняет обновленный массив favorites в localStorage в формате JSON. Это позволяет хранить данные между сеансами работы с приложением.
+    updateLikeState(id); // Вызывает функцию updateLikeState для обновления состояния кнопки "лайк"
     
     // Обновляем счетчик избранного в реальном времени
-    if (isFavoriteView && index !== -1) {
+    if (isFavoriteView && index !== -1) { // Проверяет, находится ли пользователь в режиме просмотра избранного (isFavoriteView) и было ли удалено элемент из массива favorites
         showFavorites();
     }
 }
 // Обновление состояния лайка
-function updateLikeState(catId) {
-    const catItem = document.querySelector(`[data-cat-id="${catId}"]`);
-    if (catItem) {
-        const heartIcon = catItem.querySelector('.heart-icon');
-        const isLiked = JSON.parse(localStorage.getItem('lovepics'))
+function updateLikeState(catId) { 
+    const catItem = document.querySelector(`[data-cat-id="${catId}"]`); // Находит HTML-элемент кота с атрибутом data-cat-id, равным переданному catId.
+    if (catItem) { // Проверяет, найден ли элемент кота на странице.
+        const heartIcon = catItem.querySelector('.heart-icon'); // Находит внутри элемента кота иконку сердца с классом .heart-icon.
+        const isLiked = JSON.parse(localStorage.getItem('lovepics')) // Проверяет, находится ли кот с данным catId в массиве избранных котов в localStorage:
+        // Извлекает и парсит массив lovepics из localStorage.
+        // Использует метод some для проверки наличия объекта с id равным catId.
             .some(f => f.id === catId);
             
-        heartIcon.classList.toggle('liked', isLiked);
+        heartIcon.classList.toggle('liked', isLiked); // Добавляет или удаляет класс liked у иконки сердца в зависимости от значения isLiked
     }
 }
 
 // Показать избранное
 function showFavorites() {
-    const favorites = JSON.parse(localStorage.getItem('lovepics')) || [];
-    pagination.style.display = 'none';
+    const favorites = JSON.parse(localStorage.getItem('lovepics')); // Извлекает массив избранных котов из localStorage по ключу lovepics и парсит его в объект
+    pagination.style.display = 'none'; // Скрывает пагинацию, так как в режиме просмотра избранного она не нужна.
     
-    if (favorites.length > 0) {
-        catGrid.innerHTML = favorites.map(cat => `
-            <div class="cat-item">
+    if (favorites.length > 0) { // Проверяет, есть ли избранные коты в массиве.
+        catGrid.innerHTML = favorites.map(cat => // Динамически генерирует HTML-код для каждого кота в массиве favorites и добавляет его в блок catGrid.
+             `<div class="cat-item">
                 <img src="${cat.url}" class="cat-img" alt="Избранный котик">
                 <button class="like-btn" onclick="toggleLike('${cat.id}')">
                     <svg class="heart-icon liked" viewBox="0 0 24 24">
@@ -140,25 +142,26 @@ function showFavorites() {
     }
 }
 
-// Всплывающие уведомления
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
+// // Всплывающие уведомления
+// function showNotification(message) { // Объявление функции showNotification для отображения уведомлений.
+//     const notification = document.createElement('div');  // Создаёт новый элемент <div> для уведомления.
+//     notification.className = 'notification'; // Устанавливает класс элемента в 'notification' для стyling.
+//     notification.textContent = message; // Задаёт текст уведомления, переданный в функцию.
     
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 2000);
-}
+//     document.body.appendChild(notification); // Добавляет элемент уведомления в конец тела документа.
+//     setTimeout(() => notification.remove(), 2000);
+// }
 
 // Управление активным меню
-function setActive(element) {
-    document.querySelectorAll('.menu-item').forEach(item => 
+function setActive(element) { // Объявление функции setActive для управления активным элементом меню.
+    document.querySelectorAll('.menu-item').forEach(item => // Удаляет класс 'active' у всех элементов меню с классом .menu-item.
         item.classList.remove('active'));
-    element.classList.add('active');
+    element.classList.add('active'); // Добавляет класс 'active' к переданному элементу element, делая его активным.
 }
 
 // Инициализация при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    initPagination();
-    fetchCats();
+document.addEventListener('DOMContentLoaded', () => { // Добавляет обработчик события 'DOMContentLoaded', который срабатывает после полной загрузки HTML-документа.
+    initPagination(); // Вызывает функцию initPagination для инициализации пагинации.
+    fetchCats(); // Вызывает функцию fetchCats для загрузки котов (предположительно, с сервера или API).
+
 });
