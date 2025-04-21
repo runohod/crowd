@@ -9,18 +9,17 @@ const requestOptions = {
     redirect: 'follow'
 };
 
-// DOM элементы
-const catGrid = document.getElementById("cat");
-const pagination = document.querySelector('.pagination-container');
-const indices = Array.from(document.querySelectorAll('.page-index'));
-let currentPage = 0;
+const catGrid = document.getElementById("cat"); // получчаем ссылку по айдишнику 
+const pagination = document.querySelector('.pagination-container'); // находим блок с классом .pagination-container
+const indices = Array.from(document.querySelectorAll('.page-index')); // находим все страницы с индексом и преобразуем их в массив 
+let currentPage = 1; // с помощь переменной задаем начало индексации
 
 // Инициализация пагинации
-function initPagination() {
-    indices.forEach((index, i) => {
-        index.addEventListener('click', () => handlePaginationClick(index, i));
+function initPagination() { // создаем функцию
+    indices.forEach((index, i) => { // итерация по массиву кнопок, indices - позволяют пользователю переключаться между страницами
+        index.addEventListener('click', () => handlePaginationClick(index, i)); // Добавление обработчика клика на каждую кнопку, который вызывает handlePaginationClick
     });
-    indices[0].classList.add('active');
+    indices[0].classList.add('active'); // Установка первой кнопки (индекс 0) в активное состояние путём добавления класса active.
 }
 
 // Обработчик клика по пагинации
