@@ -40,31 +40,27 @@ function handlePaginationClick(index, pageNumber) { // Объявление фу
     
     // Обновление состояния
     currentPage = pageNumber;
-    fetchCats(pageNumber);
+    fetchCats(pageNumber); //Вызывает функцию fetchCats, передавая ей номер новой страницы.
 }
 
 // Загрузка данных с API
-async function fetchCats(page = 0) {
+async function fetchCats(page = 0) { // асинк помечает функцию как асинхронную
     try {
-        const response = await fetch(
-            `https://api.thecatapi.com/v1/images/search?page=${page}&limit=10&order=ASC`, 
-            requestOptions
-        );
-        const cats = await response.json();
-        displayCats(cats);
+        const response = await fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&limit=10&order=ASC`, requestOptions); // Отправляем асинхронный GET-запрос к API котиков (30 изображений)
+        const cats = await response.json(); // эвэитне позволяет коду идти дальше, мы принудительно говорим подождать завершения пежди чем пойти дальше
+        displayCats(cats);  // Вызываем функцию для отображения котов
         pagination.style.display = 'block';
-    } catch (error) {
-        console.error("Ошибка загрузки:", error);
-        catGrid.innerHTML = "<p>Не удалось загрузить котиков 😿</p>";
+    } catch (error) { // Обработка ошибок
+        console.error("Ошибка загрузки:", error); // Выводим ошибку в консоль 
     }
 }
 
 // Отображение котиков
-function displayCats(cats) {
-    const favorites = JSON.parse(localStorage.getItem('lovepics')) || [];
+function displayCats(cats) { // Объявление функции для отображения карточек с котиками
+    const favorites = JSON.parse(localStorage.getItem('lovepics')); // Получаем данные из LocalStorage по ключу lovepics, JSON.parse преобразует строку в массив объектов
     
-    catGrid.innerHTML = cats.map(cat => `
-        <div class="cat-item" data-cat-id="${cat.id}">
+    catGrid.innerHTML = cats.map(cat => //Очищаем и обновляем содержимое контейнера catGrid map() преобразует массив котов в массив HTML-строк
+        ` <div class="cat-item" data-cat-id="${cat.id}"> 
             <img src="${cat.url}" class="cat-img" alt="Котик ${cat.id}">
             <button class="like-btn" onclick="toggleLike('${cat.id}', '${cat.url}')">
                 <svg class="heart-icon ${favorites.some(f => f.id === cat.id) ? 'liked' : ''}" 
@@ -73,30 +69,28 @@ function displayCats(cats) {
                 </svg>
             </button>
         </div>
-    `).join('');
+    `).join(''); // Преобразуем массив HTML-строк в одну строку 
 }
 
 // Управление избранным
 function toggleLike(id, url) {
-    let favorites = JSON.parse(localStorage.getItem('lovepics')) || [];
-    const index = favorites.findIndex(cat => cat.id === id);
-    const isFavoriteView = document.querySelector('.menu-item:last-child').classList.contains('active');
+    let favorites = JSON.parse(localStorage.getItem('lovepics')); // Извлекает массив избранных котов из localStorage по ключу lovepics и парсит его в объект
+    const index = favorites.findIndex(cat => cat.id === id); // Находит индекс элемента в массиве favorites с заданным id
+    const isFavoriteView = document.querySelector('.menu-item:last-child').classList.contains('active'); // Проверяет, находится ли пользователь в режиме просмотра избранных котов
 
-    if (index === -1) {
-        favorites.push({ id, url });
-        showNotification('❤️ Добавлено в избранное!');
+    if (index === -1) { // Проверяет, если элемент не найден в массиве favorites
+        favorites.push({ id, url }); // Добавляет новый объект { id, url } в массив.
     } else {
-        favorites.splice(index, 1);
-        showNotification('💔 Удалено из избранного');
+        favorites.splice(index, 1); //  Удаляет элемент из массива.
         
         // Если находимся в разделе избранного - сразу обновляем список
         if (isFavoriteView) {
-            const catElement = document.querySelector(`[data-cat-id="${id}"]`);
+            const catElement = document.querySelector(`[data-cat-id="${id}"]`); //  Находит HTML-элемент кота с данным id
             if (catElement) {
                 catElement.style.transform = 'scale(0)';
                 setTimeout(() => {
                     catElement.remove();
-                    // Если список пустой - показываем сообщение
+                    // Если список пустой
                     if (!document.querySelector('.cat-item')) {
                         catGrid.innerHTML = '<p class="empty-message">Нет избранных котиков</p>';
                     }
