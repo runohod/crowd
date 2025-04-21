@@ -23,19 +23,19 @@ function initPagination() { // создаем функцию
 }
 
 // Обработчик клика по пагинации
-function handlePaginationClick(index, pageNumber) {
+function handlePaginationClick(index, pageNumber) { // Объявление функции с двумя параметрами - текущая кнопка, индекс кнопки
     // Обновление стилей
-    indices.forEach(idx => idx.classList.remove('active'));
-    index.classList.add('active');
+    indices.forEach(idx => idx.classList.remove('active')); // Сбрасываем активное состояние со всех кнопок пагинации, удаляя класс active у каждой кнопки.
+    index.classList.add('active'); // Добавляем класс что бы выделить кнопку как активную
     
     // Анимация переключения
-    pagination.className = 'pagination-container';
-    void pagination.offsetWidth; // Рефлоу для анимации
+    pagination.className = 'pagination-container'; // Сбрасывает все классы элемента пагинации, оставляя только базовый класс 'pagination-container'
+    void pagination.offsetWidth; // Вызывает рефлоу (перерасчёт стилей), что необходимо для триггера анимации CSS
     pagination.classList.add('open', `i${pageNumber + 1}`);
     
     // Направление анимации
-    if (currentPage > pageNumber) {
-        pagination.classList.add('flip');
+    if (currentPage > pageNumber) { // Условие — проверяет, является ли текущая страница (currentPage) больше новой страницы
+        pagination.classList.add('flip'); // Действие — добавляет CSS-класс flip элементу pagination
     }
     
     // Обновление состояния
