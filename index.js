@@ -9,7 +9,7 @@ const requestOptions = {
     redirect: 'follow'
 };
 
-const catGrid = document.getElementById("cat"); // получчаем ссылку по айдишнику 
+const catGrid = document.getElementById("cat"); // получчаем ссылку по айдишнику. 
 const pagination = document.querySelector('.pagination-container'); // находим блок с классом .pagination-container
 const indices = Array.from(document.querySelectorAll('.page-index')); // находим все страницы с индексом и преобразуем их в массив 
 let currentPage = 1; // с помощь переменной задаем начало индексации
