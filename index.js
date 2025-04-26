@@ -47,7 +47,7 @@ function handlePaginationClick(index, pageNumber) { // Объявление фу
 async function fetchCats(page = 0) { // асинк помечает функцию как асинхронную
     try {
         const response = await fetch(`https://api.thecatapi.com/v1/images/search?page=${page}&limit=10&order=ASC`, requestOptions); // Отправляем асинхронный GET-запрос к API котиков (30 изображений)
-        const cats = await response.json(); // эвэитне позволяет коду идти дальше, мы принудительно говорим подождать завершения пежди чем пойти дальше
+        const cats = await response.json(); // эвэит не позволяет коду идти дальше, мы принудительно говорим подождать завершения пежди чем пойти дальше
         displayCats(cats);  // Вызываем функцию для отображения котов
         pagination.style.display = 'block';
     } catch (error) { // Обработка ошибок
