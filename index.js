@@ -172,31 +172,36 @@ document.addEventListener('DOMContentLoaded', () => { // Добавляет об
 
 
 
-function arrayDiff(a, b) {
-    const result = [];
-    result.push(a.filter(b))
-    return result;
+
+function descendingOrder(n){
+    const str = n.toString();
+    const digits = str.split('');
+    digits.sort((a, b)=> b - a);
+    const newStr = digits.join('');
+    const result = parseInt(newStr, 10);
+    return result  
   }
-  
-
-  function arrayDiff(a, b) {
-    return a.filter(function (result) {
-        !b.includes(result)
-    })
-  }
-  
-  
-  Реализуйте функцию, которая вычисляет разницу между двумя списками. Функция должна удалять все вхождения элементов из первого списка (a), которые присутствуют во втором списке (b). Порядок элементов в первом списке должен сохраняться в результате.
-  
-  Примеры
-  Если a = [1, 2] и b = [1], то результат должен быть [2].
-  
-  Если a = [1, 2, 2, 2, 3] и b = [2], то результат должен быть [1, 3].
 
 
-  a.forEach(function (el) {
-    const diff = b.includes(el)
-    if (diff === false) {
-        result.push(el)
-      }
-  })
+  function descendingOrder(n) {
+    // Преобразуем число в строку
+    const nStr = n.toString();
+    // Разбиваем строку на массив символов (цифр)
+    const tStr = nStr.split('');
+    // Сортируем массив цифр в порядке убывания
+    tStr.sort((a, b) => b - a);
+    // Объединяем отсортированные цифры обратно в строку
+    const newStr = tStr.join('');
+    // Преобразуем строку обратно в число и возвращаем результат
+    return Number(newStr);
+}
+
+
+
+
+
+
+
+
+
+
