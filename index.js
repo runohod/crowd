@@ -142,16 +142,6 @@ function showFavorites() {
     }
 }
 
-// // Всплывающие уведомления
-// function showNotification(message) { // Объявление функции showNotification для отображения уведомлений.
-//     const notification = document.createElement('div');  // Создаёт новый элемент <div> для уведомления.
-//     notification.className = 'notification'; // Устанавливает класс элемента в 'notification' для стyling.
-//     notification.textContent = message; // Задаёт текст уведомления, переданный в функцию.
-    
-//     document.body.appendChild(notification); // Добавляет элемент уведомления в конец тела документа.
-//     setTimeout(() => notification.remove(), 2000);
-// }
-
 // Управление активным меню
 function setActive(element) { // Объявление функции setActive для управления активным элементом меню.
     document.querySelectorAll('.menu-item').forEach(item => // Удаляет класс 'active' у всех элементов меню с классом .menu-item.
@@ -168,35 +158,6 @@ document.addEventListener('DOMContentLoaded', () => { // Добавляет об
 
 
 //////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-function descendingOrder(n){
-    const str = n.toString();
-    const digits = str.split('');
-    digits.sort((a, b)=> b - a);
-    const newStr = digits.join('');
-    const result = parseInt(newStr, 10);
-    return result  
-  }
-
-
-  function descendingOrder(n) {
-    // Преобразуем число в строку
-    const nStr = n.toString();
-    // Разбиваем строку на массив символов (цифр)
-    const tStr = nStr.split('');
-    // Сортируем массив цифр в порядке убывания
-    tStr.sort((a, b) => b - a);
-    // Объединяем отсортированные цифры обратно в строку
-    const newStr = tStr.join('');
-    // Преобразуем строку обратно в число и возвращаем результат
-    return Number(newStr);
-}
-
-
 
 
 
