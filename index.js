@@ -159,79 +159,15 @@ document.addEventListener('DOMContentLoaded', () => { // Добавляет об
 
 ////////////////////////////////////////////////////////////////////////////////
 
-//  1) Сгруппировать элементы массива по их типу
- function groupByType(arr) {
-  const result = {};
-  for (let i = 0; i < arr.length; i++) { 
-    const element = arr[i];             
-    const type = typeof element;        
-    if (!result[type]) {
-      result[type] = [];
+const one = document.querySelectorAll(".tab");
+
+one.forEach((tab) => {
+  tab.addEventListener("click", function () {
+    console.log(this.getAttribute("target"));
+    const target = this.getAttribute("target")
+    
+    if ("target" = "id") {
+      return 
     }
-
-    result[type].push(element);
-  }
-  return result;
-}
-
-console.log(groupByType([1, 'a', true, 2, 'b', false]));
-
-
- // 2)Найти второй по величине элемент массива.
- function secondMax(arr) {
-    const max = Math.max(...arr);
-    const filtered = arr.filter(num => num < max); 
-    return filtered.length ? Math.max(...filtered) : undefined; 
-  }
-  
-  console.log(secondMax([10, 5, 20, 8])); // 10
-  console.log(secondMax([1, 1, 1])); // undefined
-  
-
- // 3) Удалить дубликаты, но сохранить порядок первых вхождений.
- function removeDuplicates(arr) {
-    const seen = new Set(); 
-    const result = [];
-    for (const item of arr) {
-      if (!seen.has(item)) { 
-        result.push(item);  
-        seen.add(item);    
-      }
-    }
-    return result;
-  }
-  console.log(removeDuplicates([1, 2, 2, 3, 1, 4])); // [1, 2, 3, 4]
-
-
-  //4) Сгруппировать слова по их анаграммам
-  function groupAnagrams(words) {
-    const groups = {};
-    for (const word of words) {
-      const sortedKey = word.split('').sort().join('');
-      if (!groups[sortedKey]) {
-        groups[sortedKey] = [];
-      }
-      groups[sortedKey].push(word);
-    }
-    return Object.values(groups);
-  }
-  console.log(groupAnagrams(['bat', 'tab', 'tap', 'pat', 'cat']));
-  // Результат: [ ['bat', 'tab'], ['tap', 'pat'], ['cat'] ]
-
-  
-
-  //6)
-  function moveZeros(arr) {
-    let lastNonZero = 0;
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] !== 0) {
-        arr[lastNonZero++] = arr[i];
-      }
-    }
-    for (let i = lastNonZero; i < arr.length; i++) {
-      arr[i] = 0;
-    }
-    return arr;
-  }
-
-
+  });
+});
